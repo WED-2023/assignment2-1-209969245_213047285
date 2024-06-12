@@ -84,19 +84,20 @@ export default {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
     },
-    async Login() {
+    async login() {
       try {
         const users = JSON.parse(localStorage.getItem("users")) || [];
         const user = users.find(user => user.username === this.form.username && user.password === this.form.password);
         if (user) {
-          // Perform login actions, e.g., set user session
-          // For now, just navigate to home page
+          // Update root store to indicate the user is logged in
+          this.$root.store.login(this.form.username);
+          // Navigate to the home page
           this.$router.push("/");
         } else {
           throw new Error("Invalid username or password");
         }
       } catch (err) {
-        this.form.submitError = "Invalid username or password";
+        this.form.submitError = err.message;
       }
     },
     onLogin() {
@@ -105,7 +106,7 @@ export default {
       if (this.$v.form.$anyError) {
         return;
       }
-      this.Login();
+      this.login();
     }
   }
 };
