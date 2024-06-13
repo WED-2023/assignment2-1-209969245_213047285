@@ -25,12 +25,10 @@
         <b-form-invalid-feedback v-if="!$v.form.username.alpha">
           Username should contain letters only
         </b-form-invalid-feedback>
-        <b-form-invalid-feedback v-if="$v.form.username.$error">
+        <b-form-invalid-feedback v-if="usernameError">
           Username already exists. Please enter a different username.
         </b-form-invalid-feedback>
-
       </b-form-group>
-
 
       <b-form-group
           id="input-group-firstName"
@@ -170,6 +168,7 @@
 <script>
 import countries from "../assets/countries";
 import { required, minLength, maxLength, alpha, sameAs, email, helpers } from "vuelidate/lib/validators";
+import { mockRegister } from "@/services/auth"; // Import the mock register function
 
 const passwordValidator = helpers.regex('password', /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,10}$/);
 
@@ -222,49 +221,26 @@ export default {
   methods: {
     validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
-      return $dirty ? !$error
-          : null;
-    },
-    async checkUsernameExists(username) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      return users.some(user => user.username === username);
-    },
-    saveUserToLocalStorage(userDetails) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      users.push(userDetails);
-      localStorage.setItem("users", JSON.stringify(users));
-    },
-
-    async Register() {
-      if (await this.checkUsernameExists(this.form.username)) {
-        this.$v.form.username.$error = true; // Set the error state for the username field
-        return;
-      }
-      const userDetails = {
-        username: this.form.username,
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
-        country: this.form.country,
-        password: this.form.password,
-        email: this.form.email
-      };
-
-      this.saveUserToLocalStorage(userDetails);
-      this.$router.push("/login");
+      return $dirty ? !$error : null;
     },
     async onRegister() {
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
-        this.$v.form.username.$error = true;
         return;
       }
-      if (await this.checkUsernameExists(this.form.username)) {
-        this.$v.form.username.$error = true; // Set the error state for the username field
-        return;
-      }
+      
+      try {
+        const response = await mockRegister(this.form, false);
+        if (response.status === 200 && response.response.data.success) {
+          this.$router.push("/login");
+        }
+      } catch (error) {
+        if (error.status === 409) {
+          this.form.submitError = error.response.data.message;
+          this.usernameError = true;
+        }
 
-      this.saveUserToLocalStorage(this.form);
-      this.$router.push("/login");
+      }
     },
     onReset() {
       this.form = {
@@ -289,4 +265,3 @@ export default {
   max-width: 500px;
 }
 </style>
-
