@@ -1,33 +1,64 @@
-<template>
-  <router-link
-    :to="{ name: 'recipe', params: { recipeId: recipe.id } }"
-    class="recipe-preview"
-  >
-    <div class="recipe-body">
-      <img v-if="image_load" :src="recipe.image" class="recipe-image" />
-    </div>
-    <div class="recipe-footer">
-      <div :title="recipe.title" class="recipe-title">
-        {{ recipe.title }}
-      </div>
-      <ul class="recipe-overview">
+<template> 
+<div class="card" style="width: 18rem;">
+  <img class="card-img-top" v-bind:src="recipe.image">
+  <div class="card-body">
+    <router-link
+    :to="{ name: 'recipe', params: { recipeId: recipe.id } }">
+      <h7  class="recipe-title">  {{ recipe.title }}</h7>
+      <ul>
         <li>{{ recipe.readyInMinutes }} minutes</li>
         <li>{{ recipe.aggregateLikes }} likes</li>
       </ul>
-    </div>
   </router-link>
+  
+  <p class="card-text"> {{ this.truncateText(recipe.summary,150) }}
+    <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }">Learn more</router-link>
+  </p>
+
+  <button class="star-icon" @click="toggleStar">
+        <img v-if="!isStarred" src="@/assets/star.svg" width="28px" height="28px"/>
+        <img v-else src="@/assets/star-fill.svg" width="30px" height="30px"/>
+      </button>
+
+
+      <button class="heart-icon" @click="toggleHeart">
+        <img v-if="!isHearted" src="@/assets/heart.svg" width="28px" height="28px"/>
+        <img v-else src="@/assets/heart-fill.svg" width="30px" height="30px"/>
+      </button>
+
+
+
+  </div>
+
+  <div class="recipe-icon">
+      <b-tooltip v-b-tooltip.hover title="Vegan Friendly">
+      <img src="@/assets/vegan-icon.png"/>
+      </b-tooltip>
+
+      <b-tooltip v-b-tooltip.hover title="Vegetarian">
+      <img src="@/assets/vegetarian-icon.png"/>
+      </b-tooltip>
+
+      <b-tooltip v-b-tooltip.hover title="Gluten Free">
+      <img src="@/assets/gluten-free-icon.png"/>
+      </b-tooltip>
+    </div>
+</div>
+
 </template>
 
 <script>
 export default {
-  mounted() {
-    this.axios.get(this.recipe.image).then((i) => {
-      this.image_load = true;
-    });
-  },
+  // mounted() {
+  //   this.axios.get(this.recipe.image).then((i) => {
+  //     this.image_load = true;
+  //   });
+  // },
   data() {
     return {
-      image_load: false
+      //image_load: false
+      isStarred: false,
+      isHearted: false
     };
   },
   props: {
@@ -60,11 +91,50 @@ export default {
     //   }
     // }
   }
+,
+  methods: {
+    truncateText(text, limit) {
+      return text.length > limit ? text.slice(0, limit) + '...' : text;
+    },
+    toggleStar() {
+      this.isStarred = !this.isStarred;
+    }
+,
+    toggleHeart() {
+      this.isHearted = !this.isHearted;
+
+    }
+  }
 };
 </script>
 
 <style scoped>
-.recipe-preview {
+
+.recipe-icon img {
+  width: 35px;
+  height: 35px;
+}
+
+.star-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.heart-icon {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+
+
+
+
+/* .recipe-preview {
   display: inline-block;
   width: 90%;
   height: 100%;
@@ -137,5 +207,5 @@ export default {
   width: 90px;
   display: table-cell;
   text-align: center;
-}
+} */
 </style>
