@@ -15,4 +15,10 @@ export function mockGetRecipesPreview(amount = 1) {
 export function mockGetRecipeFullDetails(recipeId) {
     return { data: { recipe: recipe_full_view } } ;
   }
+
+  export function mockGetRecipeLikesCount(recipeId) {
+    return { data: { likes: recipe_full_view.aggregateLikes+1 } } ;
+  }
+
+
   

@@ -1,14 +1,10 @@
 <template> 
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 18rem; margin-bottom:1rem;">
   <img class="card-img-top" v-bind:src="recipe.image">
   <div class="card-body">
     <router-link
     :to="{ name: 'recipe', params: { recipeId: recipe.id } }">
       <h7  class="recipe-title">  {{ recipe.title }}</h7>
-      <ul>
-        <li>{{ recipe.readyInMinutes }} minutes</li>
-        <li>{{ recipe.aggregateLikes }} likes</li>
-      </ul>
   </router-link>
   
   <p class="card-text"> {{ this.truncateText(recipe.summary,150) }}
@@ -16,38 +12,46 @@
   </p>
 
   <button class="star-icon" @click="toggleStar">
-        <img v-if="!isStarred" src="@/assets/star.svg" width="28px" height="28px"/>
+        <img v-if="!isStarred" src="@/assets/star.svg" width="30px" height="30px"/>
         <img v-else src="@/assets/star-fill.svg" width="30px" height="30px"/>
       </button>
 
 
       <button class="heart-icon" @click="toggleHeart">
-        <img v-if="!isHearted" src="@/assets/heart.svg" width="28px" height="28px"/>
+        <img v-if="!isHearted" src="@/assets/heart.svg" width="30px" height="30px"/>
         <img v-else src="@/assets/heart-fill.svg" width="30px" height="30px"/>
+        <p>{{ likes }} likes</p>
       </button>
 
+      <div class="bottom-icons-container">
+            <b-tooltip v-b-tooltip.hover title="Vegan Friendly">
+            <img src="@/assets/vegan-icon.png"/>
+            </b-tooltip>
 
+            <b-tooltip v-b-tooltip.hover title="Vegetarian">
+            <img src="@/assets/vegetarian-icon.png"/>
+            </b-tooltip>
+
+            <b-tooltip v-b-tooltip.hover title="Gluten Free">
+            <img src="@/assets/gluten-free-icon.png"/>
+            </b-tooltip>
+
+        <span class="clock-icon-container">
+          <img src="@/assets/clock-fill.svg"/>
+         {{ recipe.readyInMinutes }} minutes
+        </span>
+
+        </div>
 
   </div>
-
-  <div class="recipe-icon">
-      <b-tooltip v-b-tooltip.hover title="Vegan Friendly">
-      <img src="@/assets/vegan-icon.png"/>
-      </b-tooltip>
-
-      <b-tooltip v-b-tooltip.hover title="Vegetarian">
-      <img src="@/assets/vegetarian-icon.png"/>
-      </b-tooltip>
-
-      <b-tooltip v-b-tooltip.hover title="Gluten Free">
-      <img src="@/assets/gluten-free-icon.png"/>
-      </b-tooltip>
-    </div>
+ 
 </div>
 
 </template>
 
 <script>
+import { mockGetRecipeLikesCount } from '../services/recipes';
+
 export default {
   // mounted() {
   //   this.axios.get(this.recipe.image).then((i) => {
@@ -58,7 +62,8 @@ export default {
     return {
       //image_load: false
       isStarred: false,
-      isHearted: false
+      isHearted: false,
+      likes: this.recipe.aggregateLikes
     };
   },
   props: {
@@ -102,7 +107,8 @@ export default {
 ,
     toggleHeart() {
       this.isHearted = !this.isHearted;
-
+      response = mockGetRecipeLikesCount;
+      this.likes = response.data.likes;
     }
   }
 };
@@ -110,7 +116,13 @@ export default {
 
 <style scoped>
 
-.recipe-icon img {
+.bottom-icons-container {
+  display: flex;
+  align-items: center;
+  left:10px;
+}
+
+.bottom-icons-container img {
   width: 35px;
   height: 35px;
 }
@@ -129,6 +141,22 @@ export default {
   background: none;
   cursor: pointer;
 }
+
+.clock-icon-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  margin-left:60px;
+}
+
+.clock-icon-container img{
+  border: none;
+  background: none;
+  width:30x;
+  height:30px;
+}
+
+
 
 
 

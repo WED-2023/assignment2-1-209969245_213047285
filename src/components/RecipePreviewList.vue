@@ -24,6 +24,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    amount:{
+      type:Number,
+      required:true
     }
   },
   data() {
@@ -41,9 +45,8 @@ export default {
         //   this.$root.store.server_domain + "/recipes/random",
         // );
 
-        const amountToFetch = 5; // Set this to how many recipes you want to fetch
+        const amountToFetch = this.amount; // Set this to how many recipes you want to fetch
         const response = mockGetRecipesPreview(amountToFetch);
-
 
         console.log(response);
         const recipes = response.data.recipes;
