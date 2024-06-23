@@ -1,15 +1,32 @@
 <template>
     <div>
-        Family Recipes
+      
+      <RecipePreviewList title="Family Recipes" :amount="amountFamily" previewType="family" class="Family Center" />
+  
     </div>
-</template>
-
-<script>
-    export default {
-        
-    }
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+  </template>
+  
+  <script>
+  import RecipePreviewList from "../components/RecipePreviewList";
+  import { mockGetFamilyRecipesAmount } from "../services/recipes.js";
+  export default {
+      name: "myFamilyPage",
+  
+      components: {
+      RecipePreviewList,
+    },
+      data() {
+        return {
+          amountFamily: mockGetFamilyRecipesAmount(),
+        };
+      },
+      methods: {
+    
+        },
+       
+      };
+  </script>
+  
+  <style lang="scss" scoped>
+  
+  </style>

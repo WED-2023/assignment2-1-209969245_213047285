@@ -15,6 +15,12 @@
 <script>
 import RecipePreview from "./RecipePreview.vue";
 import { mockGetRecipesPreview } from "../services/recipes.js";
+import { mockGetMyRecipesPreview } from "../services/recipes.js";
+import { mockGetFavoriteRecipesPreview } from "../services/recipes.js";
+import { mockGetFamilyRecipesPreview } from "../services/recipes.js";
+
+
+
 export default {
   name: "RecipePreviewList",
   components: {
@@ -28,6 +34,10 @@ export default {
     amount:{
       type:Number,
       required:true
+    },
+    previewType:{
+      type:Text,
+      required: true
     }
   },
   data() {
@@ -46,7 +56,20 @@ export default {
         // );
 
         const amountToFetch = this.amount; // Set this to how many recipes you want to fetch
-        const response = mockGetRecipesPreview(amountToFetch);
+        let response;
+        switch(this.previewType){
+          case "favorites":
+            response = mockGetFavoriteRecipesPreview(amountToFetch);
+            break;
+          case "myRecipes":
+            response = mockGetMyRecipesPreview(amountToFetch);
+            break;
+          case "family":
+            response = mockGetFamilyRecipesPreview(amountToFetch);
+            break;
+          default:
+            response = mockGetRecipesPreview(amountToFetch);
+        }
 
         console.log(response);
         const recipes = response.data.recipes;
