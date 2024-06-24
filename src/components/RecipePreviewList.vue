@@ -5,7 +5,7 @@
       <slot></slot>
     </h3>
     <b-row>
-      <b-col v-for="r in recipes" :key="r.id">
+      <b-col v-for="r in recipes" :key="r.id" lg="4">
         <RecipePreview class="recipePreview" :recipe="r" />
       </b-col>
     </b-row>
@@ -38,11 +38,15 @@ export default {
     previewType:{
       type:Text,
       required: true
+    },
+    recipes: {
+      type: Array,
+      required: true
     }
   },
   data() {
     return {
-      recipes: []
+      //recipes: []
     };
   },
   mounted() {
@@ -74,7 +78,6 @@ export default {
         console.log(response);
         const recipes = response.data.recipes;
         console.log(recipes);
-        this.recipes = [];
         this.recipes.push(...recipes);
       } catch (error) {
         console.log(error);

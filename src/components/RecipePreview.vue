@@ -1,5 +1,5 @@
 <template> 
-<div class="card" style="width: 18rem; margin-bottom:1rem;">
+<div class="card" style="width: 18rem; height:36rem; margin-bottom:1rem;">
   <img class="card-img-top" v-bind:src="recipe.image">
   <div class="card-body">
     <router-link
@@ -24,17 +24,14 @@
       </button>
 
       <div class="bottom-icons-container">
-            <b-tooltip v-b-tooltip.hover title="Vegan Friendly">
-            <img src="@/assets/vegan-icon.png"/>
-            </b-tooltip>
-
-            <b-tooltip v-b-tooltip.hover title="Vegetarian">
-            <img src="@/assets/vegetarian-icon.png"/>
-            </b-tooltip>
-
-            <b-tooltip v-b-tooltip.hover title="Gluten Free">
-            <img src="@/assets/gluten-free-icon.png"/>
-            </b-tooltip>
+          
+            <img src="@/assets/vegan-icon.png" title="Vegan Friendly"/>
+            
+          
+            <img src="@/assets/vegetarian-icon.png" title="Vegetarian"/>
+            
+      
+            <img src="@/assets/gluten-free-icon.png"  title="Gluten Free"/>
 
         <span class="clock-icon-container">
           <img src="@/assets/clock-fill.svg"/>
@@ -63,7 +60,7 @@ export default {
       //image_load: false
       isStarred: false,
       isHearted: false,
-      likes: this.recipe.aggregateLikes
+      likes: this.recipe.aggregateLikes,
     };
   },
   props: {
@@ -99,7 +96,9 @@ export default {
 ,
   methods: {
     truncateText(text, limit) {
-      return text.length > limit ? text.slice(0, limit) + '...' : text;
+      let truncated = text.length > limit ? text.slice(0, limit) + '...' : text;
+      // feel with invisible chars the remaining area
+      return truncated.padEnd(limit, '');
     },
     toggleStar() {
       this.isStarred = !this.isStarred;
@@ -110,6 +109,7 @@ export default {
       response = mockGetRecipeLikesCount;
       this.likes = response.data.likes;
     }
+,
   }
 };
 </script>
