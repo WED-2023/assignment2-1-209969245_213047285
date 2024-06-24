@@ -170,9 +170,10 @@ export default {
       if (!this.checkFormValidity()) {
         return;
       }
-      if (!this.recipe.image) {
-      this.recipe.image = 'https://img.spoonacular.com/recipes/716429-556x370.jpg';
-    }
+    //   if (!this.recipe.image) {
+    //   this.recipe.image = 'https://img.spoonacular.com/recipes/716429-556x370.jpg';
+    // }
+    this.recipe.image = 'https://img.spoonacular.com/recipes/716429-556x370.jpg';
       const newRecipe = {
         ...this.recipe,
         id: Date.now(),

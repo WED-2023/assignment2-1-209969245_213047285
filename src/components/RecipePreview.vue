@@ -7,7 +7,7 @@
       <h7  class="recipe-title">  {{ recipe.title }}</h7>
   </router-link>
   
-  <p class="card-text"> {{ this.truncateText(recipe.summary,150) }}
+  <p class="card-text" style="height:10rem;"> {{ this.truncateText(recipe.summary,150) }}
     <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }">Learn more</router-link>
   </p>
 
@@ -48,6 +48,11 @@
 
 <script>
 import { mockGetRecipeLikesCount } from '../services/recipes';
+
+import { eventBus } from '../eventBuss.js';
+import localStorageManager from '../services/LocalStorageManager.js';
+
+
 
 export default {
   // mounted() {
@@ -102,6 +107,11 @@ export default {
     },
     toggleStar() {
       this.isStarred = !this.isStarred;
+      if(this.isStarred){
+        eventBus.$emit('toggle-favorite', this.recipe, this.isFavorited);
+        localStorageManager.addFavoriteRecipe(this.recipe);
+        
+      }
     }
 ,
     toggleHeart() {

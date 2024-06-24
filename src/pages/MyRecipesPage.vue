@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       amountMyRecipes: mockGetMyRecipesAmount(),
-      myRecipesPreviewList: [], // Add this line to store the created recipes
+      myRecipesPreviewList: [],
     };
   },
   methods: {
