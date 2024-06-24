@@ -1,13 +1,14 @@
 <template>
   <div class="container">
     <!-- <h1 class="title">Main Page</h1> -->
-    <RecipePreviewList title="Explore this recipes" amount="3" previewType="" class="RandomRecipes center" />
+    <RecipePreviewList title="Explore this recipes" amount="3" previewType="favorites" class="RandomRecipes center" :recipes="randomRecipesPreviewList" />
     <router-link v-if="!$root.store.username" to="/login" tag="b-button">You need to Login to vue this</router-link>
     <!-- {{ !$root.store.username }} -->
     <RecipePreviewList
       title="Last Viewed Recipes"
       amount="3"
-      previewType=""
+      :recipes="recentRecipesPreviewList"
+      previewType="favorites"
       :class="{
         RandomRecipes: true,
         blur: !$root.store.username,
@@ -28,6 +29,12 @@ import RecipePreviewList from "../components/RecipePreviewList";
 export default {
   components: {
     RecipePreviewList
+  },
+  data(){
+    return {
+      randomRecipesPreviewList: [],
+      recentRecipesPreviewList:[]
+    };
   }
 };
 </script>

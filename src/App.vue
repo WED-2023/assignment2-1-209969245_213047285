@@ -4,36 +4,38 @@
       <b-navbar-brand :to="{ name: 'main' }">Home</b-navbar-brand>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
-
-        <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
+          <b-nav-item :to="{ name: 'search' }">Search</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-if="!$root.store.username">
           <b-nav-item :to="{ name: 'login' }">Login</b-nav-item>
           <b-nav-item :to="{ name: 'register' }">Register</b-nav-item>
+          <b-nav-text>Hello Guest</b-nav-text>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto" v-else>
-        <b-nav-item :to="{ name: 'about' }">About</b-nav-item>  
-        <b-nav-item-dropdown>
-          <template #button-content>
-            Personal
-          </template>
-          <b-dropdown-item :to="{ name: 'myRecipes' }">My Recipes</b-dropdown-item>
-          <b-dropdown-item :to="{ name: 'favoriteRecipes' }">Favorite Recipes</b-dropdown-item>
-          <b-dropdown-item :to="{ name: 'familyRecipes' }">Family Recipes</b-dropdown-item>
-        </b-nav-item-dropdown>
-        <b-nav-item-dropdown right>
-          <template #button-content>
-            User
-          </template>
-          <b-dropdown-item>{{ $root.store.username }}: <button @click="Logout">Logout</button>|</b-dropdown-item>
-        </b-nav-item-dropdown>
+          <b-nav-item :to="{ name: 'about' }">About</b-nav-item>  
+          <b-nav-item-dropdown>
+            <template #button-content>
+              Personal
+            </template>
+            <b-dropdown-item :to="{ name: 'myRecipes' }">My Recipes</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'favoriteRecipes' }">Favorite Recipes</b-dropdown-item>
+            <b-dropdown-item :to="{ name: 'familyRecipes' }">Family Recipes</b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-nav-item-dropdown right>
+            <template #button-content>
+              User
+            </template>
+            <b-dropdown-item>
+              {{ $root.store.username }}: <button @click="Logout">Logout</button> |
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-nav-text>Hello {{ $root.store.username }}</b-nav-text>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
     <router-view />
   </div>
 </template>
-
 
 <script>
 export default {
@@ -50,7 +52,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss">
 @import "@/scss/form-style.scss";

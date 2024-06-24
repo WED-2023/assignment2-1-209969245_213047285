@@ -1,7 +1,7 @@
 <template>
     <div>
       
-      <RecipePreviewList title="Family Recipes" :amount="amountFamily" previewType="family" class="Family Center" />
+      <RecipePreviewList title="Family Recipes" :amount="amountFamily" previewType="family" class="Family Center" :recipes="familyRecipesList"/>
   
     </div>
   </template>
@@ -17,6 +17,7 @@
     },
       data() {
         return {
+          familyRecipesList:[],
           amountFamily: mockGetFamilyRecipesAmount(),
         };
       },

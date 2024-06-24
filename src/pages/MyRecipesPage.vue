@@ -22,7 +22,6 @@ export default {
   components: {
     RecipePreviewList,
     CreateRecipeModal,
-    RecipePreview,
   },
   data() {
     return {

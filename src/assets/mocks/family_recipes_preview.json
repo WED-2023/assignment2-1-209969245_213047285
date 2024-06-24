@@ -1,0 +1,40 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "image": "https://www.budgetbytes.com/wp-content/uploads/2015/10/Matzo-Ball-Soup-close-1.jpg",
+      "title": "Matzo Ball Soup",
+      "readyInMinutes": 60,
+      "aggregateLikes": 150,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": false,
+      "summary": "A classic Jewish-Polish dish featuring fluffy matzo balls in a savory broth. Perfect for any occasion.",
+      "servings": 4
+    },
+    {
+      "id": 2,
+      "image": "https://hips.hearstapps.com/hmg-prod/images/delish-190912-potato-latkes-0287-landscape-pf-1571156601.jpg?crop=0.8891228070175439xw:1xh;center,top&resize=1200:*",
+      "title": "Potato Latkes",
+      "readyInMinutes": 45,
+      "aggregateLikes": 180,
+      "vegetarian": true,
+      "vegan": false,
+      "glutenFree": true,
+      "summary": "Crispy potato pancakes, a traditional Jewish-Polish delicacy served with applesauce or sour cream.",
+      "servings": 6
+    },
+    {
+      "id": 3,
+      "image": "https://i2.wp.com/www.downshiftology.com/wp-content/uploads/2017/05/Beef-Brisket-main.jpg",
+      "title": "Beef Brisket",
+      "readyInMinutes": 180,
+      "aggregateLikes": 220,
+      "vegetarian": false,
+      "vegan": false,
+      "glutenFree": true,
+      "summary": "Slow-cooked tender beef brisket, a hearty Jewish-Polish favorite often served during holidays and celebrations.",
+      "servings": 8
+    }
+  ]
+}

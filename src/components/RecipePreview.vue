@@ -116,7 +116,12 @@ export default {
 ,
     toggleHeart() {
       this.isHearted = !this.isHearted;
-      response = mockGetRecipeLikesCount;
+      if (this.isHearted) {
+        this.likes += 1;
+      } else {
+        this.likes -= 1;
+      }
+      response = mockGetRecipeLikesCount();
       this.likes = response.data.likes;
     }
 ,

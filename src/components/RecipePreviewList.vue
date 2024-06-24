@@ -69,8 +69,8 @@ export default {
             response = mockGetMyRecipesPreview(amountToFetch);
             break;
           case "family":
-            response = mockGetFamilyRecipesPreview(amountToFetch);
-            break;
+          response = mockGetFamilyRecipesPreview(amountToFetch);
+          break;
           default:
             response = mockGetRecipesPreview(amountToFetch);
         }
