@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mockGetRecipeFullDetails } from "../services/recipes.js";
+import { getRecipeById, mockGetRecipeFullDetails } from "../services/recipes.js";
 export default {
   data() {
     return {
@@ -51,45 +51,37 @@ export default {
   },
   async created() {
     try {
-      let response;
-      // response = this.$route.params.response;
+    
+  
+      // try {
+      //   // Make an API request to fetch the recipe details
+      //   response = await axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information?includeNutrition=false&apiKey=${apiKey}`);
 
-      try {
-        // response = await this.axios.get(
-        //   this.$root.store.server_domain + "/recipes/" + this.$route.params.recipeId,
-        //   {
-        //     withCredentials: true
-        //   }
-        // );
+      //   // Check if response status is not 200 and redirect to NotFound page
+      //   if (response.status !== 200) {
+      //     this.$router.replace("/NotFound");
+      //     return;
+      //   }
 
-        response = mockGetRecipeFullDetails(this.$route.params.recipeId);
+      // } catch (error) {
+      //   console.error("Error fetching recipe data", error);
+      //   this.$router.replace("/NotFound");
+      //   return;
+      // }
+      const Id = this.$route.params.recipeId;
+      const response = await getRecipeById(id);
+    
 
-        // console.log("response.status", response.status);
-        //if (response.status !== 200) this.$router.replace("/NotFound");
-      } catch (error) {
-        console.log("error.response.status", error.response.status);
-        this.$router.replace("/NotFound");
-        return;
-      }
+      const { analyzedInstructions, instructions, extendedIngredients, aggregateLikes, readyInMinutes, image, title, vegetarian, vegan, glutenFree, servings } = response;
 
-      let {
-        analyzedInstructions,
-        instructions,
-        extendedIngredients,
-        aggregateLikes,
-        readyInMinutes,
-        image,
-        title
-      } = response.data.recipe;
-
-      let _instructions = analyzedInstructions
-        .map((fstep) => {
+      const _instructions = analyzedInstructions
+        .map(fstep => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;
         })
         .reduce((a, b) => [...a, ...b], []);
 
-      let _recipe = {
+      this.recipe = {
         instructions,
         _instructions,
         analyzedInstructions,
@@ -97,12 +89,16 @@ export default {
         aggregateLikes,
         readyInMinutes,
         image,
-        title
+        title,
+        vegetarian,
+        vegan,
+        glutenFree,
+        servings
       };
-
+      // Set the recipe data
       this.recipe = _recipe;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 };

@@ -23,7 +23,7 @@ export default {
         favoriteRecipesPreviewList: [],
       };
     },created() {
-      this.loadFavoriteRecipes();  // Load favorite recipes from localStorage when the component is created
+      //this.loadFavoriteRecipes();  // Load favorite recipes from localStorage when the component is created
       //this.clearLocalStorage();
       eventBus.$on('toggle-favorite', this.addRecipe);
   }
@@ -37,18 +37,18 @@ export default {
         this.amountFavorites++;
         localStorage.setItem('favoriteRecipes', JSON.stringify(this.favoriteRecipesPreviewList));  // Save the updated list to localStorage
     },
-    loadFavoriteRecipes() {
-      const storedRecipes = localStorage.getItem('favoriteRecipes');  // Retrieve the favorite recipes from localStorage
-      if (storedRecipes) {
-        this.favoriteRecipesPreviewList = JSON.parse(storedRecipes);  // Parse and assign the favorite recipes to the component's data
-        //this.amountFavorites = length(this.favoriteRecipesPreviewList)
-      }
+    // loadFavoriteRecipes() {
+    //   const storedRecipes = localStorage.getItem('favoriteRecipes');  // Retrieve the favorite recipes from localStorage
+    //   if (storedRecipes) {
+    //     this.favoriteRecipesPreviewList = JSON.parse(storedRecipes);  // Parse and assign the favorite recipes to the component's data
+    //     //this.amountFavorites = length(this.favoriteRecipesPreviewList)
+    //   }
     },
-    clearLocalStorage(){
-      localStorage.clear();
-    }
+    // clearLocalStorage(){
+    //   localStorage.clear();
+    // }
 
-      },
+    //   },
      
     };
 </script>

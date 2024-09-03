@@ -13,8 +13,9 @@
 </template>
 
 <script>
+
 import RecipePreview from "./RecipePreview.vue";
-import { mockGetRecipesPreview } from "../services/recipes.js";
+import { getRandomRecipes, mockGetRecipesPreview } from "../services/recipes.js";
 import { mockGetMyRecipesPreview } from "../services/recipes.js";
 import { mockGetFavoriteRecipesPreview } from "../services/recipes.js";
 import { mockGetFamilyRecipesPreview } from "../services/recipes.js";
@@ -46,7 +47,7 @@ export default {
   },
   data() {
     return {
-      //recipes: []
+
     };
   },
   mounted() {
@@ -58,27 +59,35 @@ export default {
         // const response = await this.axios.get(
         //   this.$root.store.server_domain + "/recipes/random",
         // );
+      
+        const response = await getRandomRecipes();
+        
+        const newRecipes = response.data.recipes;
+        console.log(newRecipes);
 
-        const amountToFetch = this.amount; // Set this to how many recipes you want to fetch
-        let response;
-        switch(this.previewType){
-          case "favorites":
-            response = mockGetFavoriteRecipesPreview(amountToFetch);
-            break;
-          case "myRecipes":
-            response = mockGetMyRecipesPreview(amountToFetch);
-            break;
-          case "family":
-          response = mockGetFamilyRecipesPreview(amountToFetch);
-          break;
-          default:
-            response = mockGetRecipesPreview(amountToFetch);
+        if (Array.isArray(newRecipes)) {
+          // Emit event to parent with new recipes
+          this.$emit('update-recipes', newRecipes);
+        } else {
+          console.error("API did not return an array", newRecipes);
         }
+        // const amountToFetch = this.amount; // Set this to how many recipes you want to fetch
+        // let response;
+        // switch(this.previewType){
+        //   case "favorites":
+        //     response = mockGetFavoriteRecipesPreview(amountToFetch);
+        //     break;
+        //   case "myRecipes":
+        //     response = mockGetMyRecipesPreview(amountToFetch);
+        //     break;
+        //   case "family":
+        //   response = mockGetFamilyRecipesPreview(amountToFetch);
+        //   break;
+        //   default:
+        //     response = mockGetRecipesPreview(amountToFetch);
+        // }
 
-        console.log(response);
-        const recipes = response.data.recipes;
-        console.log(recipes);
-        this.recipes.push(...recipes);
+      
       } catch (error) {
         console.log(error);
       }

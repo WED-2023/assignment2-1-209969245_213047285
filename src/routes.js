@@ -32,7 +32,7 @@ const routes = [
     component: SearchPage,
   },
   {
-    path: "/recipe",
+    path: '/recipe/:recipeId',
     name: "recipe",
     component: RecipeViewPage,
   },

@@ -1,7 +1,8 @@
+
 <template>
-  <div class="container">
+  <div class="container" >
     <!-- <h1 class="title">Main Page</h1> -->
-    <RecipePreviewList title="Explore this recipes" amount="3" previewType="favorites" class="RandomRecipes center" :recipes="randomRecipesPreviewList" />
+    <RecipePreviewList title="Explore this recipes" amount="3" previewType="random" class="RandomRecipes center" :recipes="randomRecipesPreviewList"  @update-recipes="handleUpdateRecipes"/>
     <router-link v-if="!$root.store.username" to="/login" tag="b-button">You need to Login to vue this</router-link>
     <!-- {{ !$root.store.username }} -->
     <RecipePreviewList
@@ -25,7 +26,9 @@
 </template>
 
 <script>
+
 import RecipePreviewList from "../components/RecipePreviewList";
+import MyRecipesPageVue from './MyRecipesPage.vue';
 export default {
   components: {
     RecipePreviewList
@@ -35,6 +38,12 @@ export default {
       randomRecipesPreviewList: [],
       recentRecipesPreviewList:[]
     };
+  },
+  methods: {
+    handleUpdateRecipes(newRecipes) {
+      // Update the parent's recipes array by pushing new recipes
+      this.randomRecipesPreviewList.push(...newRecipes);
+    }
   }
 };
 </script>
