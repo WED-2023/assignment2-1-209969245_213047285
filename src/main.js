@@ -82,11 +82,16 @@ const shared_data = {
     localStorage.setItem("username", username);
     this.username = username;
     console.log("login", this.username);
+    //blank session for logged user
+    sessionStorage.clear();
   },
   logout() {
     console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
+    //reset session storage
+    sessionStorage.clear();
+
   },
 };
 console.log(shared_data);

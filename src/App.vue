@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar toggleable="lg" type="dark" variant="success">
+      <img src="../src/assets/icon.png" alt="WhiteHeadChef Icon" style="height: 60px; margin-right: 10px;">
       <b-navbar-brand :to="{ name: 'main' }">Home</b-navbar-brand>
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
@@ -33,7 +34,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <router-view />
+      <div class="content-container">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -43,8 +46,7 @@ export default {
   methods: {
     Logout() {
       this.$root.store.logout();
-      this.$root.toast("Logout", "User logged out successfully", "success");
-
+      this.$root.toast("Logout", "User logged out successfully", "success");   
       this.$router.push("/").catch(() => {
         this.$forceUpdate();
       });
@@ -62,6 +64,28 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   min-height: 100vh;
+
+
+  
+  background-image: url('../src/assets/background.jpg'); 
+  background-repeat: repeat; /* Ensure the image repeats */
+  background-position: top left;
+  background-size: 250px 250px; /* Let the image use its original size for repeating */
+  min-height: 100vh; /* Make sure the background covers the entire viewport */
+  margin: 0;
+  padding: 0;
+
+
+  /* White box content container */
+.content-container {
+  background-color: white;
+  margin: 0 auto; /* Center the container horizontally */
+  width: 80%; /* You can adjust the width here */
+  max-width: 1200px; /* Set a maximum width */
+  padding: 20px; /* Add padding inside the box */
+  flex-grow: 1; /* Ensures the content container grows to fill available space */
+}
+
 }
 
 #nav {

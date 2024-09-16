@@ -31,35 +31,35 @@
       </b-form-group>
 
       <b-form-group
-          id="input-group-firstName"
+          id="input-group-firstname"
           label-cols-sm="3"
           label="First Name:"
-          label-for="firstName"
+          label-for="firstname"
       >
         <b-form-input
-            id="firstName"
-            v-model="$v.form.firstName.$model"
+            id="firstname"
+            v-model="$v.form.firstname.$model"
             type="text"
-            :state="validateState('firstName')"
+            :state="validateState('firstname')"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="!$v.form.firstName.required">
+        <b-form-invalid-feedback v-if="!$v.form.firstname.required">
           First name is required
         </b-form-invalid-feedback>
       </b-form-group>
 
       <b-form-group
-          id="input-group-lastName"
+          id="input-group-lastname"
           label-cols-sm="3"
           label="Last Name:"
-          label-for="lastName"
+          label-for="lastname"
       >
         <b-form-input
-            id="lastName"
-            v-model="$v.form.lastName.$model"
+            id="lastname"
+            v-model="$v.form.lastname.$model"
             type="text"
-            :state="validateState('lastName')"
+            :state="validateState('lastname')"
         ></b-form-input>
-        <b-form-invalid-feedback v-if="!$v.form.lastName.required">
+        <b-form-invalid-feedback v-if="!$v.form.lastname.required">
           Last name is required
         </b-form-invalid-feedback>
       </b-form-group>
@@ -168,7 +168,7 @@
 <script>
 import countries from "../assets/countries";
 import { required, minLength, maxLength, alpha, sameAs, email, helpers } from "vuelidate/lib/validators";
-import { mockRegister } from "@/services/auth"; // Import the mock register function
+import { register } from "../services/auth.js";
 
 const passwordValidator = helpers.regex('password', /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,10}$/);
 
@@ -178,8 +178,8 @@ export default {
     return {
       form: {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",
@@ -197,8 +197,8 @@ export default {
         length: (value) => minLength(3)(value) && maxLength(8)(value),
         alpha
       },
-      firstName: { required },
-      lastName: { required },
+      firstname: { required },
+      lastname: { required },
       country: { required },
       password: {
         required,
@@ -222,31 +222,41 @@ export default {
     validateState(param) {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
+    }, async Register() {
+  try {
+    const userDetails = {
+      username: this.form.username,
+      firstname: this.form.firstname, 
+      lastname: this.form.lastname,   
+      country: this.form.country,
+      password: this.form.password,
+      email: this.form.email
+    };
+
+    const response = await register(userDetails);
+
+    this.$router.push("/login");
+  } catch (err) {
+    console.log(err.response);
+    if (err.response && err.response.data) {
+      this.form.submitError = err.response.data.message;
+    } else {
+      this.form.submitError = 'An error occurred during registration';
+    }
+  }
     },
     async onRegister() {
       this.$v.form.$touch();
       if (this.$v.form.$anyError) {
         return;
       }
-      
-      try {
-        const response = await mockRegister(this.form, false);
-        if (response.status === 200 && response.response.data.success) {
-          this.$router.push("/login");
-        }
-      } catch (error) {
-        if (error.status === 409) {
-          this.form.submitError = error.response.data.message;
-          this.usernameError = true;
-        }
-
-      }
+      await this.Register();
     },
     onReset() {
       this.form = {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",

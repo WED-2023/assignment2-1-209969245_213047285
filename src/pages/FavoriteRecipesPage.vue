@@ -7,9 +7,8 @@
 </template>
 
 <script>
-import RecipePreviewList from "../components/RecipePreviewList";
-import { mockGetFavoriteRecipesAmount } from "../services/recipes.js";
-import { eventBus } from '../eventBuss.js';
+import RecipePreviewList from "../components/RecipePreviewList.vue";
+import {addFavorite, getFavorites, removeFavorite} from "../services/user.js";
 
 export default {
     name: "myFavoritesPage",
@@ -19,37 +18,36 @@ export default {
   },
     data() {
       return {
-        amountFavorites: 1,
+        amountFavorites: 5,
         favoriteRecipesPreviewList: [],
       };
     },created() {
-      //this.loadFavoriteRecipes();  // Load favorite recipes from localStorage when the component is created
-      //this.clearLocalStorage();
-      eventBus.$on('toggle-favorite', this.addRecipe);
+
+      this.loadFavoriteRecipes();
+      
   }
   ,  beforeDestroy() {
-    //eventBus.$off('toggle-favorite', this.updateFavoriteRecipes);
   }
   ,
     methods: {
-      addRecipe(favoriteRecipe, isFavorited) {
-        this.favoriteRecipesPreviewList.push(favoriteRecipe);
-        this.amountFavorites++;
-        localStorage.setItem('favoriteRecipes', JSON.stringify(this.favoriteRecipesPreviewList));  // Save the updated list to localStorage
+      async loadFavoriteRecipes() {
+      try {
+        const response = await getFavorites();
+        this.favoriteRecipesPreviewList = response;
+      } catch (err) {
+        console.error("Failed to load favorite recipes:", err);
+      }
     },
-    // loadFavoriteRecipes() {
-    //   const storedRecipes = localStorage.getItem('favoriteRecipes');  // Retrieve the favorite recipes from localStorage
-    //   if (storedRecipes) {
-    //     this.favoriteRecipesPreviewList = JSON.parse(storedRecipes);  // Parse and assign the favorite recipes to the component's data
-    //     //this.amountFavorites = length(this.favoriteRecipesPreviewList)
-    //   }
-    },
-    // clearLocalStorage(){
-    //   localStorage.clear();
-    // }
+    async removeFromFavorites(recipe) {
+      try {
+        await removeFavorite(recipe.id);
+        this.favoriteRecipesPreviewList = this.favoriteRecipesPreviewList.filter(r => r.id !== recipe.id);
+      } catch (err) {
+        console.error("Failed to remove favorite recipe:", err);
+      }
+    }
+  }
 
-    //   },
-     
     };
 </script>
 

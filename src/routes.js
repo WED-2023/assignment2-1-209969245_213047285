@@ -35,6 +35,7 @@ const routes = [
     path: '/recipe/:recipeId',
     name: "recipe",
     component: RecipeViewPage,
+
   },
   
   {

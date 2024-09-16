@@ -64,8 +64,9 @@
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
-import {mockLogin} from "../services/auth.js"
+import { required } from "vuelidate/lib/validators"
+import { login } from "../services/auth.js"
+import axios from "axios";
 export default {
   name: "Login",
   data() {
@@ -94,27 +95,31 @@ export default {
     },
     async Login() {
       try {
+        const credentials = {
+          username: this.form.username,
+          password: this.form.password
+        };
+       
+        const response = await login(credentials);
+      
         
-        // const response = await this.axios.post(
-        //   this.$root.store.server_domain +"/Login",
 
-
-        //   {
-        //     username: this.form.username,
-        //     password: this.form.password
-        //   }
-        // );
-
-        const success = true; // modify this to test the error handling
-        const response = mockLogin({username:this.form.username, password:this.form.password}, success);
-        // console.log(response);
-        // this.$root.loggedIn = true;
         console.log(this.$root.store.login);
         this.$root.store.login(this.form.username);
-        this.$router.push("/");
-      } catch (err) {
-        console.log(err.response);
-        this.form.submitError = err.response.data.message;
+        if (this.$router.currentRoute.path !== '/') {
+          this.$router.push("/");
+        }
+
+      
+
+      }
+      catch (err) {
+        console.error("Error during login:", err);
+        if (err.response && err.response.data && err.response.data.message) {
+          this.form.submitError = err.response.data.message;
+        } else {
+          this.form.submitError = "An error occurred during login.";
+        }
       }
     },
   

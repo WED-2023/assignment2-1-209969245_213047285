@@ -1,90 +1,11 @@
 // // src/services/recipes.js
-// import recipe_full_view from "../assets/mocks/recipe_full_view.json";
-// import recipe_preview from "../assets/mocks/recipe_preview.json";
-// import family_preview from "../assets/mocks/family_recipes_preview.json";
 
 import axios from 'axios'; 
+import { RecipeManager } from './recipeManager';
 
 const API_URL = 'https://tal-noam.cs.bgu.ac.il';
 
 
-// export function mockGetRecipesPreview(amount = 1) {
-//   let recipes = [];
-//   for(let i = 0; i < amount; i++){
-//     recipes.push(recipe_preview);
-//   }
-
-//   return { data: { recipes: recipes } };
-// }
-
-// export function mockGetRecipeFullDetails(recipeId) {
-//     return { data: { recipe: recipe_full_view } } ;
-//   }
-
-//   export function mockGetRecipeLikesCount(recipeId) {
-//     return { data: { likes: recipe_full_view.aggregateLikes+1 } } ;
-//   }
-
-//   export function mockGetFavoriteRecipesPreview(amount = 1) {
-//     let recipes = [];
-//     for(let i = 0; i < amount; i++){
-//       recipes.push(recipe_preview);
-//     }
-  
-//     return { data: { recipes: recipes } };
-//   }
-
-//   export function mockGetMyRecipesPreview(amount = 1) {
-//     let recipes = [];
-//     for(let i = 0; i < amount; i++){
-//       recipes.push(recipe_preview);
-//     }
-  
-//     return { data: { recipes: recipes } };
-//   }
-
-//   export function mockGetFamilyRecipesPreview(amount = 1) {
-//     let recipes = [];
-//     for(let i = 0; i < amount; i++){
-//       recipes.push(family_preview.recipes[i]);
-//     }
-  
-//     return { data: { recipes: recipes } };
-//   }
-
-  
-//   export function mockGetFavoriteRecipesAmount() {
-//     return 9;
-//   }
-
-//   export function mockGetFamilyRecipesAmount() {
-//     return 3;
-//   }
-
-  export function mockGetMyRecipesAmount() {
-    return 10;
-  }
-
-//   //Returns the filtered recipes by specific criteria (will be implemented differently with the server)
-//   export function mockGetFilteredRecipes(amount=5){
-//     let recipes = [];
-//     for(let i = 0; i < amount; i++){
-//       recipes.push(recipe_preview);
-//     }
-  
-//     return { data: { recipes: recipes } };
-//   }
-
-
-
-//     export function mockGetRandomRecipes(amount=3){
-//     let recipes = [];
-//     for(let i = 0; i < amount; i++){
-//       recipes.push(recipe_preview);
-//     }
-  
-//     return { data: { recipes: recipes } };
-//   }
 export async function getRandomRecipes() {
   try {
     const response = await axios.get(`${API_URL}/recipes/random`, {
@@ -128,5 +49,61 @@ export async function searchRecipes(query, cuisine, diet, intolerance, number) {
     console.error('Error searching for recipes:', error);
     throw error;
   }
+
+}
+
+export async function markRecipeAsWatched(recipeId) {
+  try {
   
+
+    const response = await axios.post(`${API_URL}/users/watched`, 
+      { recipeId },
+      { withCredentials: true }
+    );
+    console.log(response);
+    return response.data;
+  
+  } catch (error) {
+    console.error('Error marking recipe as watched:', error);
+    throw error;
+  }
+}
+
+export async function getLastViewedRecipes(number) {
+  try {
+    let objIds = JSON.stringify(await RecipeManager.getPersonalRecipeIds());
+    const response = await axios.get(`${API_URL}/users/lastWatchedRecipes`, {
+      params: { limit: number, personalRecipeIds: objIds },
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching last viewed recipes:', error);
+    throw error;
+  }
+}
+
+export async function isRecipeWatched(recipeId) {
+  try {
+    const response = await axios.post(`${API_URL}/users/isWatched`, 
+      { recipeId },
+      { withCredentials: true }
+    );
+    return response.data.watched;
+  } catch (error) {
+    console.error('Error checking if recipe is watched:', error);
+    throw error;
+  }
+}
+
+export async function getRecipeType(recipeId) {
+  try {
+
+    const response = await axios.get(`${API_URL}/users/getRecipeType`,  {params: { recipe_id: recipeId }, withCredentials: true });
+
+    return response.data.recipeType ? response.data.recipeType : 'spoonacular';
+  } catch (error) {
+    console.error("Error fetching recipe type:", error);
+    return '';
+  }
 }
